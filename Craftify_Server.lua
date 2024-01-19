@@ -2,13 +2,13 @@ local dfpwm = require("cc.audio.dfpwm")
 local modem = peripheral.find("modem")
 local speaker = peripheral.find("speaker")
 
+modem.open(334)
+
 local URL = "http://82.212.142.228/music/"
 
 local chunkSize = 16
 
 local lines = {}
-local songLineIndex = 1
-local songPlaying = ""
 
 
 local function fetchSongs()
@@ -30,13 +30,26 @@ local function playSong(song)
 
         for i=1, string.len(music) / chunkSize*1024, 1 do
             local buffer = decoder(string.sub(music, (i-1)*chunkSize*1024+1, i*chunkSize*1024))
-            speaker.playAudio(buffer, 100)
-            modem.transmit(333, 334, buffer)
-            os.pullEvent('speaker_audio_empty')
+            if not buffer == {} then
+                speaker.playAudio(buffer, 0)
+                modem.transmit(333, 334, buffer)
+                os.pullEvent('speaker_audio_empty')
+            end
         end
 
         --decoder({table.unpack(musicD, (i-1)*16*1024+1, i*16*1024)})  #Old Method#
     end
 end
 
-playSong("Antoine_Daniel-Fanta")
+local function waitForCommand()
+    local event, side, channel, replyChannel, message, distance
+    repeat
+        event, side, channel, replyChannel, message, distance = os.pullEvent("modem_message")
+    until channel == 334
+
+    if message:sub(1, 3) == "PLY" then
+        playSong(message:sub(4))
+    end
+end
+
+waitForCommand()
