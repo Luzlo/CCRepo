@@ -9,5 +9,5 @@ while true do
         event, side, channel, replyChannel, message, distance = os.pullEvent("modem_message")
     until channel == 333
 
-    speaker.play(message, 100)
+    speaker.playAudio(message, 100)
 end
