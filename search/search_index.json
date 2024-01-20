@@ -1,0 +1,1 @@
+{"config":{"lang":["en"],"separator":"[\\s\\-]+","pipeline":["stopWordFilter"]},"docs":[{"location":"","title":"Welcome to CCRepo","text":"<p>CCRepo helps centralize and connect ComputerCraft projects.</p>"}]}
