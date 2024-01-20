@@ -1,0 +1,6 @@
+site_name: CCRepo
+theme:
+  name: material
+  palette: 
+    scheme: slate
+  
